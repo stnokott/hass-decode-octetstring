@@ -26,10 +26,10 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend(
 
 
 def setup_platform(
-    hass: HomeAssistant,
-    config: ConfigType,
-    add_entities: AddEntitiesCallback,
-    discovery_info=None,
+        hass: HomeAssistant,
+        config: ConfigType,
+        add_entities: AddEntitiesCallback,
+        discovery_info=None,
 ):
     _LOGGER.debug("Setting up sensor")
 
@@ -44,10 +44,10 @@ def setup_platform(
 
     def handle_event(event):
         try:
-          if event.data['entity_id'] == entity_id:
-            sensor.entity_updated(event.data['new_state'].state)
+            if event.data['entity_id'] == entity_id:
+                sensor.entity_updated(event.data['new_state'].state)
         except KeyError:
-          _LOGGER.warning(f"Can't find entity_id attr in {event.data}")
+            _LOGGER.warning(f"Can't find entity_id attr in {event.data}")
 
     hass.bus.listen(EVENT_STATE_CHANGED, handle_event)
 
@@ -88,7 +88,7 @@ class OctetStringSensor(SensorEntity):
     @property
     def name(self):
         return self._name
-        
+
     @property
     def state(self):
         return self._state
