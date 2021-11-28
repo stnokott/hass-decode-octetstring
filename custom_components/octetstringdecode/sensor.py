@@ -33,19 +33,21 @@ def setup_platform(
 ):
     _LOGGER.debug("Setting up sensor")
 
-    name = config.get(CONF_NAME).lower().strip()
+    name = config.get(CONF_NAME)
     entity_id = config.get(CONF_ENTITY_ID)
 
     try:
-        sensor = OctetStringSensor(entity_id, name)
+        sensor = OctetStringSensor(name, entity_id)
     except urllib.error.HTTPError as e:
         _LOGGER.error(e.reason)
         return False
 
     def handle_event(event):
-        if event.data.entity_id == entity_id:
-            _LOGGER.debug(f"Source entity {entity_id} changed, scheduling update")
-            sensor.entity_updated(event.data.new_state.state)
+        try:
+          if event.data['entity_id'] == entity_id:
+            sensor.entity_updated(event.data['new_state'].state)
+        except KeyError:
+          _LOGGER.warning(f"Can't find entity_id attr in {event.data}")
 
     hass.bus.listen(EVENT_STATE_CHANGED, handle_event)
 
@@ -65,7 +67,7 @@ class OctetStringSensor(SensorEntity):
         if octet_string_value is None:
             self._state = None
             self._available = False
-        if octet_string_value[:2] != "0x":
+        elif octet_string_value[:2] != "0x":
             _LOGGER.warning(
                 f"State of entity {self._entity_id} does not start with '0x'!"
             )
@@ -80,11 +82,16 @@ class OctetStringSensor(SensorEntity):
             _LOGGER.error(
                 f"Encountered error while parsing state of {self._entity_id}:\n{e}"
             )
+        self._available = True
         self.async_write_ha_state()
 
     @property
     def name(self):
         return self._name
+        
+    @property
+    def state(self):
+        return self._state
 
     @property
     def available(self) -> bool:
