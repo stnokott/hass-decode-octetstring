@@ -1,0 +1,11 @@
+{
+  "domain": "octetstringdecode",
+  "name": "Octet String Decoder",
+  "version": "0.0.1",
+  "documentation": "https://github.com/stnokott/hass-decode-octetstring",
+  "dependencies": [],
+  "codeowners": [
+    "@stnokott"
+  ],
+  "requirements": []
+}
