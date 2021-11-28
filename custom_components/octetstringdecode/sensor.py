@@ -12,7 +12,7 @@ from homeassistant.components.sensor import PLATFORM_SCHEMA, SensorEntity
 from homeassistant.const import CONF_NAME, CONF_ENTITY_ID, EVENT_STATE_CHANGED
 import homeassistant.helpers.config_validation as cv
 from homeassistant.core import HomeAssistant
-from homeassistant.helpers import ConfigType
+from homeassistant.helpers.typing import ConfigType
 from homeassistant.helpers.entity_platform import AddEntitiesCallback
 
 _LOGGER = logging.getLogger(__name__)
